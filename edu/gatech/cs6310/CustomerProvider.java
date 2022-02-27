@@ -9,6 +9,10 @@ public class CustomerProvider {
         this.allCustomers = new TreeMap<>();
     }
 
+    public TreeMap<String, Customer> getAllCustomers() {
+        return allCustomers;
+    }
+
     public void addNewCustomer(String account, String firstName, String lastName, String phoneNum, int rating, int credits) {
         if (allCustomers.containsKey(account)) {
             System.out.println(Utility.duplicateCustomerAccMsg);

@@ -15,6 +15,7 @@ public class DeliveryService {
         StoreAndDronesProvider storeAndDronesProvider = new StoreAndDronesProvider(storeProvider);
         FlyDroneProvider flyDroneProvider = new FlyDroneProvider(storeAndDronesProvider, pilotProvider);
         CustomerProvider customerProvider = new CustomerProvider();
+        OrderProvider orderProvider = new OrderProvider();
         while (true) {
             try {
                 // Determine the next command and echo it to the monitor for testing purposes
@@ -108,7 +109,12 @@ public class DeliveryService {
 //                    System.out.println("no parameters needed");
 
                 } else if (tokens[0].equals("start_order")) {
-                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", drone: " + tokens[3] + ", customer: " + tokens[4]);
+                    String storeName = tokens[1];
+                    String orderID = tokens[2];
+                    String droneID = tokens[3];
+                    String customerAcc = tokens[4];
+                    orderProvider.startOrderForStore(storeName, orderID, droneID, customerAcc, storeAndDronesProvider, customerProvider);
+//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", drone: " + tokens[3] + ", customer: " + tokens[4]);
 
                 } else if (tokens[0].equals("display_orders")) {
                     System.out.println("store: " + tokens[1]);
