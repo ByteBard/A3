@@ -45,4 +45,24 @@ public class OrderProvider {
             System.out.println(Utility.nonExistingStoreMsg);
         }
     }
+
+    public void displayOrders(String storeName, StoreProvider storeProvider){
+        if(storeProvider.getAllStoresWithNameMap().containsKey(storeName)){
+            if (storeOrdersMap.containsKey(storeName)){
+                TreeMap<String, Order> currentOrders = storeOrdersMap.get(storeName);
+                for (Order order: currentOrders.values()){
+                    displayOrder(order);
+                }
+                System.out.println(Utility.displayCompleteMsg);
+            }else{
+                System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+            }
+        }else {
+            System.out.println(Utility.nonExistingStoreMsg);
+        }
+    }
+
+    public void displayOrder(Order order){
+        System.out.println("orderID:" + order.getOrderID());
+    }
 }
