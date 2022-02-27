@@ -14,6 +14,7 @@ public class DeliveryService {
         PilotProvider pilotProvider = new PilotProvider();
         StoreAndDronesProvider storeAndDronesProvider = new StoreAndDronesProvider(storeProvider);
         FlyDroneProvider flyDroneProvider = new FlyDroneProvider(storeAndDronesProvider, pilotProvider);
+        CustomerProvider customerProvider = new CustomerProvider();
         while (true) {
             try {
                 // Determine the next command and echo it to the monitor for testing purposes
@@ -92,11 +93,19 @@ public class DeliveryService {
 //                    System.out.println("store: " + tokens[1] + ", drone: " + tokens[2] + ", pilot: " + tokens[3]);
 
                 } else if (tokens[0].equals("make_customer")) {
-                    System.out.print("account: " + tokens[1] + ", first_name: " + tokens[2] + ", last_name: " + tokens[3]);
-                    System.out.println(", phone: " + tokens[4] + ", rating: " + tokens[5] + ", credit: " + tokens[6]);
+                    String customerAcc = tokens[1];
+                    String firstName = tokens[2];
+                    String lastName = tokens[3];
+                    String phoneNum = tokens[4];
+                    int rating = Integer.parseInt(tokens[5]);
+                    int credits = Integer.parseInt(tokens[6]);
+                    customerProvider.addNewCustomer(customerAcc, firstName, lastName, phoneNum, rating, credits);
+//                    System.out.print("account: " + tokens[1] + ", first_name: " + tokens[2] + ", last_name: " + tokens[3]);
+//                    System.out.println(", phone: " + tokens[4] + ", rating: " + tokens[5] + ", credit: " + tokens[6]);
 
                 } else if (tokens[0].equals("display_customers")) {
-                    System.out.println("no parameters needed");
+                    customerProvider.displayAllCustomers();
+//                    System.out.println("no parameters needed");
 
                 } else if (tokens[0].equals("start_order")) {
                     System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", drone: " + tokens[3] + ", customer: " + tokens[4]);

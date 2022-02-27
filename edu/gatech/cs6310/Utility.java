@@ -4,6 +4,7 @@ public class Utility {
     public static String changeCompleteMsg = "OK:change_completed";
     public static String nonExistingDroneIdMsg = "ERROR:drone_identifier_does_not_exist";
     public static String nonExistingPilotAccMsg = "ERROR:pilot_identifier_does_not_exist";
+    public static String duplicateCustomerAccMsg = "ERROR:customer_identifier_already_exists";
     public static String duplicateDroneIdMsg = "ERROR:drone_identifier_already_exists";
     public static String duplicatePilotAccountMsg = "ERROR:pilot_identifier_already_exists";
     public static String duplicatePilotLicenceMsg = "ERROR:pilot_license_already_exists";
