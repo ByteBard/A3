@@ -14,6 +14,11 @@ public class Utility {
     public static String displayCompleteMsg = "OK:display_completed";
     public static String nonExistingStoreMsg = "ERROR:store_identifier_does_not_exist";
     public static String nonExistingCustomerMsg = "ERROR:customer_identifier_does_not_exist";
+    public static String nonExistingOrderMsg = "ERROR:order_identifier_does_not_exist";
+    public static String nonExistingItemMsg = "ERROR:item_identifier_does_not_exist";
+    public static String duplicateItemInOrderMsg = "ERROR:item_already_ordered";
+    public static String overCreditMsg = "ERROR:customer_cant_afford_new_item";
+    public static String overWeightMsg = "ERROR:drone_cant_carry_new_item";
 
     public static String getFullName(String firstName, String lastName){
         return firstName + "_" + lastName;

@@ -1,10 +1,13 @@
 package edu.gatech.cs6310;
 
+import java.util.TreeMap;
+
 public class Order {
     private String orderID;
     private String storeName;
     private String customerAcc;
     private String droneID;
+    private TreeMap<String, Item> requestedItems;
 
     public Order(String orderID, String storeName, String customerAcc, String droneID) {
         this.orderID = orderID;
@@ -43,5 +46,21 @@ public class Order {
 
     public void setDroneID(String droneID) {
         this.droneID = droneID;
+    }
+
+    public TreeMap<String, Item> getRequestedItems() {
+        return requestedItems;
+    }
+
+    public void setRequestedItems(TreeMap<String, Item> requestedItems) {
+        this.requestedItems = requestedItems;
+    }
+
+    public void addRequestedItem(Item item){
+        if(requestedItems.containsKey(item.getName())){
+            System.out.println(Utility.duplicateItemInOrderMsg);
+        }else{
+            requestedItems.put(item.getName(), item);
+        }
     }
 }

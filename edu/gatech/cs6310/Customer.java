@@ -6,7 +6,8 @@ public class Customer {
     private String lastName;
     private String phoneNum;
     private int rating;
-    private int credits;
+    private int totalCredits;
+    private int remainingCredits;
 
     public Customer(String account, String firstName, String lastName, String phoneNum, int rating, int credits) {
         this.account = account;
@@ -14,55 +15,28 @@ public class Customer {
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.rating = rating;
-        this.credits = credits;
+        this.totalCredits = credits;
+        this.remainingCredits = credits;
+    }
+
+    public int getTotalCredits() {
+        return totalCredits;
+    }
+
+    public void setTotalCredits(int totalCredits) {
+        this.totalCredits = totalCredits;
+    }
+
+    public int getRemainingCredits() {
+        return remainingCredits;
+    }
+
+    public void setRemainingCredits(int remainingCredits) {
+        this.remainingCredits = remainingCredits;
     }
 
     public String getAccount() {
         return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getCredits() {
-        return credits;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
     }
 
     public void displayCustomer(){
@@ -71,7 +45,7 @@ public class Customer {
                 "name:" + firstName + "_" + lastName + "," +
                 "phone:" + phoneNum + "," +
                 "rating:" + rating + "," +
-                "credit:" + credits
+                "credit:" + totalCredits
                 );
     }
 }
