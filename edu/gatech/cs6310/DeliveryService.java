@@ -81,7 +81,7 @@ public class DeliveryService {
 
                 } else if (tokens[0].equals("display_drones")) {
                     String storeName = tokens[1];
-                    storeAndDronesProvider.displayDronesForStore(storeName);
+                    flyDroneProvider.displayDronesForStore(storeName);
 //                    System.out.println("store: " + tokens[1]);
 
                 } else if (tokens[0].equals("fly_drone")) {
