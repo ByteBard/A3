@@ -69,10 +69,12 @@ public class OrderProvider {
     public void displayOrder(Order order) {
         System.out.println("orderID:" + order.getOrderID());
         //item_name:pot_roast,total_quantity:3,total_cost:30,total_weight:15
-        for (Item item : order.getRequestedItems().values()) {
+        for (OrderItem orderItem : order.getRequestedItems().values()) {
             System.out.println(
-                    "item_name:" + item.getName() + "," +
-                    "total_quantity"
+                    "item_name:" + orderItem.getName() + "," +
+                    "total_quantity:" + orderItem.getQuantity() + "," +
+                    "total_cost:" + orderItem.getTotalPrice() + "," +
+                    "total_weight:" + orderItem.getTotalWeight()
             );
         }
     }
@@ -94,12 +96,12 @@ public class OrderProvider {
                             if (currentStoreAndItems.getAllItems().containsKey(itemName)) {
                                 Item targetItem = currentStoreAndItems.getAllItems().get(itemName);
                                 Drone targetDrone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
-                                int orderWeight = targetItem.getWeight() * quantity;
+                                int orderWeight = targetItem.getUnitWeight() * quantity;
                                 if (targetDrone.getRemainingCap() < orderWeight) {
                                     System.out.println(Utility.overWeightMsg);
                                 } else {
                                     //Finally add new item to order!
-                                    addRequestedItem(targetOrder, targetItem, customer, targetDrone, orderWeight, orderPrice);
+                                    addRequestedItem(targetOrder, targetItem, customer, targetDrone, orderWeight, orderPrice, quantity);
                                 }
                             } else {
                                 System.out.println(Utility.nonExistingItemMsg);
@@ -119,9 +121,9 @@ public class OrderProvider {
         }
     }
 
-    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int orderWeight, int orderPrice) {
+    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int orderWeight, int orderPrice, int quantity) {
         boolean isSuccess = true;
-        TreeMap<String, Item> requestedItems = targetOrder.getRequestedItems();
+        TreeMap<String, OrderItem> requestedItems = targetOrder.getRequestedItems();
         if (requestedItems.containsKey(item.getName())) {
             System.out.println(Utility.duplicateItemInOrderMsg);
             isSuccess = false;
@@ -141,7 +143,11 @@ public class OrderProvider {
         }
 
         if(isSuccess){
-            requestedItems.put(item.getName(), item);
+            OrderItem orderItem = new OrderItem(item.getName(), 0, 0, 0);
+            orderItem.setQuantity(quantity + orderItem.getQuantity());
+            orderItem.setTotalPrice(orderPrice + orderItem.getTotalPrice());
+            orderItem.setTotalWeight(orderWeight + orderItem.getTotalWeight());
+            requestedItems.put(item.getName(), orderItem);
             customer.setRemainingCredits(remainingCredits - orderPrice);
             drone.setRemainingCap(updatedWeight);
             System.out.println(Utility.changeCompleteMsg);

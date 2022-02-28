@@ -2,13 +2,11 @@ package edu.gatech.cs6310;
 
 public class Item {
     private String name;
-    private int weight;
-    private int unitPrice;
-    private int quantity;
+    private int unitWeight;
 
-    public Item(String name, int weight) {
+    public Item(String name, int unitWeight) {
         this.name = name;
-        this.weight = weight;
+        this.unitWeight = unitWeight;
     }
 
     public String getName() {
@@ -19,27 +17,12 @@ public class Item {
         this.name = name;
     }
 
-    public int getWeight() {
-        return weight;
+    public int getUnitWeight() {
+        return unitWeight;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
+    public void setUnitWeight(int unitWeight) {
+        this.unitWeight = unitWeight;
     }
 
-    public int getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(int unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }

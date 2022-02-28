@@ -26,13 +26,13 @@ public class StoreAndItemsProvider {
         }else {
             StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
             for (Item item: existingStoreAndItems.getAllItems().values()) {
-                System.out.println(item.getName() + "," + item.getWeight());
+                System.out.println(item.getName() + "," + item.getUnitWeight());
             }
             System.out.println(Utility.displayCompleteMsg);
         }
     }
 
-    public void sellItemForStore(String storeName, String itemName, int weight) {
+    public void sellItemForStore(String storeName, String itemName, int unitWeight) {
         if (!storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             System.out.println(Utility.nonExistingStoreMsg);
         } else {
@@ -40,7 +40,7 @@ public class StoreAndItemsProvider {
             if (store == null) {
                 System.out.println(Utility.nonExistingStoreMsg);
             } else {
-                Item item = new Item(itemName, weight);
+                Item item = new Item(itemName, unitWeight);
                 if(allStoresWithItems.containsKey(storeName)){
                     StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
                     existingStoreAndItems.sellNewItemForStore(item);

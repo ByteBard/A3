@@ -40,9 +40,9 @@ public class DeliveryService {
                 else if (tokens[0].equals("sell_item")) {
                     String storeName = tokens[1];
                     String itemName = tokens[2];
-                    int itemWeight = Integer.parseInt(tokens[3]);
+                    int unitWeight = Integer.parseInt(tokens[3]);
 //                    System.out.println("store: " + storeName + ", item: " + itemName + ", weight: " + itemWeight);7
-                    storeAndItemsProvider.sellItemForStore(storeName, itemName, itemWeight);
+                    storeAndItemsProvider.sellItemForStore(storeName, itemName, unitWeight);
                 }
 
                 //Display Items

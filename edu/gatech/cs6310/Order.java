@@ -7,7 +7,7 @@ public class Order {
     private String storeName;
     private String customerAcc;
     private String droneID;
-    private TreeMap<String, Item> requestedItems;
+    private TreeMap<String, OrderItem> requestedItems;
 
     public Order(String orderID, String storeName, String customerAcc, String droneID) {
         this.orderID = orderID;
@@ -49,11 +49,11 @@ public class Order {
         this.droneID = droneID;
     }
 
-    public TreeMap<String, Item> getRequestedItems() {
+    public TreeMap<String, OrderItem> getRequestedItems() {
         return requestedItems;
     }
 
-    public void setRequestedItems(TreeMap<String, Item> requestedItems) {
+    public void setRequestedItems(TreeMap<String, OrderItem> requestedItems) {
         this.requestedItems = requestedItems;
     }
 }
