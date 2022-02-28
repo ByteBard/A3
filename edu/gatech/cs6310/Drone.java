@@ -74,4 +74,8 @@ public class Drone {
     public void setRemainingTrips(int remainingTrips) {
         this.remainingTrips = remainingTrips;
     }
+
+    public void completeOneTrip() {
+        this.remainingTrips--;
+    }
 }

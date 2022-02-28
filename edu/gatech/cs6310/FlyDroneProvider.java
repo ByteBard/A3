@@ -14,6 +14,14 @@ public class FlyDroneProvider {
         this.pilotProvider = pilotProvider;
     }
 
+    public StoreAndDronesProvider getStoreAndDronesProvider() {
+        return storeAndDronesProvider;
+    }
+
+    public PilotDroneBiPair getPilotDroneBiPair() {
+        return pilotDroneBiPair;
+    }
+
     public void flyDrone(String storeName, String droneID, String pilotAcc) {
         if (pilotProvider.getAllPilotsWithAccountMap().containsKey(pilotAcc)) {
             Pilot pilotToBeAssigned = pilotProvider.getAllPilotsWithAccountMap().get(pilotAcc);

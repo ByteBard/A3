@@ -66,6 +66,10 @@ public class Pilot {
         this.experienceCount = experienceCount;
     }
 
+    public void completeOneDelivery(){
+        experienceCount++;
+    }
+
     public Pilot(String account, String firstName, String lastName, String phoneNum, String taxID, String licenceID, int experienceCount) {
         this.account = account;
         this.firstName = firstName;

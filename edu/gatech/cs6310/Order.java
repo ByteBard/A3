@@ -8,6 +8,7 @@ public class Order {
     private String customerAcc;
     private String droneID;
     private TreeMap<String, OrderItem> requestedItems;
+    private int totalPrice;
 
     public Order(String orderID, String storeName, String customerAcc, String droneID) {
         this.orderID = orderID;
@@ -15,6 +16,15 @@ public class Order {
         this.customerAcc = customerAcc;
         this.droneID = droneID;
         requestedItems = new TreeMap<>();
+        totalPrice = 0;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getOrderID() {

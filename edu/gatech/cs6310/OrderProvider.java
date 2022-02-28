@@ -66,15 +66,48 @@ public class OrderProvider {
         }
     }
 
+    public boolean purchaseOrderSuccess(String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
+        if (!flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+            System.out.println(Utility.nonExistingStoreMsg);
+            return false;
+        }
+
+        if (!storeOrdersMap.containsKey(storeName)) {
+            System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+            return false;
+        }
+
+        TreeMap<String, Order> currentOrders = storeOrdersMap.get(storeName);
+        if (!currentOrders.containsKey(orderID)) {
+            System.out.println(Utility.nonExistingOrderMsg);
+            return false;
+        }
+
+        Order targetOrder = currentOrders.get(orderID);
+        Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
+        Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+        Pilot matchedPilot = flyDroneProvider.getPilotDroneBiPair().getDroneToPilot().get(targetDrone.getComboID());
+
+        customer.setTotalCredits(customer.getTotalCredits() - targetOrder.getTotalPrice());
+        Store store = flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().GetByStoreName(storeName);
+        store.setRevenue(store.getRevenue() + targetOrder.getTotalPrice());
+        targetDrone.completeOneTrip();
+        matchedPilot.completeOneDelivery();
+        currentOrders.remove(orderID);
+
+        System.out.println(Utility.changeCompleteMsg);
+        return true;
+    }
+
     public void displayOrder(Order order) {
         System.out.println("orderID:" + order.getOrderID());
         //item_name:pot_roast,total_quantity:3,total_cost:30,total_weight:15
         for (OrderItem orderItem : order.getRequestedItems().values()) {
             System.out.println(
                     "item_name:" + orderItem.getName() + "," +
-                    "total_quantity:" + orderItem.getQuantity() + "," +
-                    "total_cost:" + orderItem.getTotalPrice() + "," +
-                    "total_weight:" + orderItem.getTotalWeight()
+                            "total_quantity:" + orderItem.getQuantity() + "," +
+                            "total_cost:" + orderItem.getTotalPrice() + "," +
+                            "total_weight:" + orderItem.getTotalWeight()
             );
         }
     }
@@ -142,7 +175,8 @@ public class OrderProvider {
             isSuccess = false;
         }
 
-        if(isSuccess){
+        if (isSuccess) {
+            targetOrder.setTotalPrice(targetOrder.getTotalPrice() + orderPrice);
             OrderItem orderItem = new OrderItem(item.getName(), 0, 0, 0);
             orderItem.setQuantity(quantity + orderItem.getQuantity());
             orderItem.setTotalPrice(orderPrice + orderItem.getTotalPrice());
