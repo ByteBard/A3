@@ -122,7 +122,13 @@ public class DeliveryService {
 //                    System.out.println("store: " + tokens[1]);
 
                 } else if (tokens[0].equals("request_item")) {
-                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", item: " + tokens[3] + ", quantity: " + tokens[4] + ", unit_price: " + tokens[5]);
+                    String storeName = tokens[1];
+                    String orderID = tokens[2];
+                    String itemName = tokens[3];
+                    int quantity = Integer.parseInt(tokens[4]);
+                    int unitPrice = Integer.parseInt(tokens[5]);
+                    orderProvider.requestItem(storeName, orderID, itemName, quantity, unitPrice, storeAndDronesProvider, storeAndItemsProvider, customerProvider);
+//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", item: " + tokens[3] + ", quantity: " + tokens[4] + ", unit_price: " + tokens[5]);
 
                 } else if (tokens[0].equals("purchase_order")) {
                     System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);

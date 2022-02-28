@@ -14,6 +14,7 @@ public class Order {
         this.storeName = storeName;
         this.customerAcc = customerAcc;
         this.droneID = droneID;
+        requestedItems = new TreeMap<>();
     }
 
     public String getOrderID() {
@@ -54,13 +55,5 @@ public class Order {
 
     public void setRequestedItems(TreeMap<String, Item> requestedItems) {
         this.requestedItems = requestedItems;
-    }
-
-    public void addRequestedItem(Item item){
-        if(requestedItems.containsKey(item.getName())){
-            System.out.println(Utility.duplicateItemInOrderMsg);
-        }else{
-            requestedItems.put(item.getName(), item);
-        }
     }
 }
