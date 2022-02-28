@@ -8,6 +8,7 @@ public class Drone {
     private int remainingCap;
     private int totalTrips;
     private int remainingTrips;
+    private int pendingOrderNum;
 
     public Drone(String storeName, String droneID, int totalCap, int remainingCap, int tripsInitial, int tripsLeft) {
         this.comboID = storeName + "_" + droneID;
@@ -17,6 +18,15 @@ public class Drone {
         this.remainingCap = remainingCap;
         this.totalTrips = tripsInitial;
         this.remainingTrips = tripsLeft;
+        this.pendingOrderNum = 0;
+    }
+
+    public int getPendingOrderNum() {
+        return pendingOrderNum;
+    }
+
+    public void setPendingOrderNum(int pendingOrderNum) {
+        this.pendingOrderNum = pendingOrderNum;
     }
 
     public String getComboID() {
@@ -77,5 +87,13 @@ public class Drone {
 
     public void completeOneTrip() {
         this.remainingTrips--;
+    }
+
+    public void pendingOrderNumUp() {
+        pendingOrderNum++;
+    }
+
+    public void pendingOrderDown() {
+        pendingOrderNum--;
     }
 }

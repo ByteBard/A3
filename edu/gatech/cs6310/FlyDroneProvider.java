@@ -58,7 +58,7 @@ public class FlyDroneProvider {
                     String msg =
                             "droneID:" + drone.getDroneID() + "," +
                                     "total_cap:" + drone.getTotalCap() + "," +
-                                    "num_orders:" + 0 + "," +
+                                    "num_orders:" + drone.getPendingOrderNum() + "," +
                                     "remaining_cap:" + drone.getRemainingCap() + "," +
                                     "trips_left:" + drone.getRemainingTrips();
                     if (pilotDroneBiPair.getDroneToPilot().containsKey(drone.getComboID())) {

@@ -18,12 +18,14 @@ public class OrderProvider {
                                 StoreAndDronesProvider storeAndDronesProvider, CustomerProvider customerProvider,
                                 TreeMap<String, Order> currentOrders) {
         if (storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).containsKey(droneID)) {
+            Drone drone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(droneID);
             if (!customerProvider.getAllCustomers().containsKey(customerAcc)) {
                 System.out.println(Utility.nonExistingCustomerMsg);
             } else {
                 Order order = new Order(orderID, storeName, customerAcc, droneID);
                 currentOrders.put(orderID, order);
                 storeOrdersMap.put(storeName, currentOrders);
+                drone.pendingOrderNumUp();
                 System.out.println(Utility.changeCompleteMsg);
             }
         } else {
@@ -92,9 +94,9 @@ public class OrderProvider {
         Store store = flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().GetByStoreName(storeName);
         store.setRevenue(store.getRevenue() + targetOrder.getTotalPrice());
         targetDrone.completeOneTrip();
+        targetDrone.pendingOrderDown();
         matchedPilot.completeOneDelivery();
         currentOrders.remove(orderID);
-
         System.out.println(Utility.changeCompleteMsg);
         return true;
     }
