@@ -3,8 +3,8 @@ package edu.gatech.cs6310;
 public class Item {
     private String name;
     private int weight;
-    private int price;
-    private int count;
+    private int unitPrice;
+    private int quantity;
 
     public Item(String name, int weight) {
         this.name = name;
@@ -27,19 +27,19 @@ public class Item {
         this.weight = weight;
     }
 
-    public int getPrice() {
-        return price;
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public int getCount() {
-        return count;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

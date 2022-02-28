@@ -68,6 +68,13 @@ public class OrderProvider {
 
     public void displayOrder(Order order) {
         System.out.println("orderID:" + order.getOrderID());
+        //item_name:pot_roast,total_quantity:3,total_cost:30,total_weight:15
+        for (Item item : order.getRequestedItems().values()) {
+            System.out.println(
+                    "item_name:" + item.getName() + "," +
+                    "total_quantity"
+            );
+        }
     }
 
     public void requestItem(String storeName, String orderID, String itemName, int quantity, int unitPrice,
@@ -113,24 +120,30 @@ public class OrderProvider {
     }
 
     public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int orderWeight, int orderPrice) {
+        boolean isSuccess = true;
         TreeMap<String, Item> requestedItems = targetOrder.getRequestedItems();
         if (requestedItems.containsKey(item.getName())) {
             System.out.println(Utility.duplicateItemInOrderMsg);
-        } else {
+            isSuccess = false;
+        }
+
+        int remainingCredits = customer.getRemainingCredits();
+        int updatedCredits = remainingCredits - orderPrice;
+        if (updatedCredits < 0) {
+            System.out.println("DEBUG: illegal credit: " + updatedCredits);
+            isSuccess = false;
+        }
+
+        int updatedWeight = drone.getRemainingCap() - orderWeight;
+        if (updatedWeight < 0) {
+            System.out.println("DEBUG: illegal weight: " + updatedWeight);
+            isSuccess = false;
+        }
+
+        if(isSuccess){
             requestedItems.put(item.getName(), item);
-            int remainingCredits = customer.getRemainingCredits();
-            int updatedCredits = remainingCredits - orderPrice;
-            if (updatedCredits < 0) {
-                System.out.println("DEBUG: illegal credit: " + updatedCredits);
-            }else{
-                customer.setRemainingCredits(remainingCredits - orderPrice);
-            }
-            int updatedWeight = drone.getRemainingCap() - orderWeight;
-            if(updatedWeight < 0){
-                System.out.println("DEBUG: illegal weight: " + updatedWeight);
-            }else{
-                drone.setRemainingCap(updatedWeight);
-            }
+            customer.setRemainingCredits(remainingCredits - orderPrice);
+            drone.setRemainingCap(updatedWeight);
             System.out.println(Utility.changeCompleteMsg);
         }
     }
