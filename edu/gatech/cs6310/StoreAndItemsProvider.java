@@ -21,14 +21,18 @@ public class StoreAndItemsProvider {
     }
 
     public void displayStoreItems(String storeName){
-        if(!allStoresWithItems.containsKey(storeName)){
+        if(!storeProvider.getAllStoresWithNameMap().containsKey(storeName)){
             System.out.println(Utility.nonExistingStoreMsg);
         }else {
-            StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
-            for (Item item: existingStoreAndItems.getAllItems().values()) {
-                System.out.println(item.getName() + "," + item.getUnitWeight());
+            if(allStoresWithItems.containsKey(storeName)){
+                StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
+                for (Item item: existingStoreAndItems.getAllItems().values()) {
+                    System.out.println(item.getName() + "," + item.getUnitWeight());
+                }
+                System.out.println(Utility.displayCompleteMsg);
+            }else{
+                System.out.println(Utility.displayCompleteMsg);
             }
-            System.out.println(Utility.displayCompleteMsg);
         }
     }
 

@@ -161,28 +161,29 @@ public class OrderProvider {
                     Order targetOrder = currentOrders.get(orderID);
                     Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
                     int orderPrice = quantity * unitPrice;
-                    if (quantity * unitPrice > customer.getRemainingCredits()) {
-                        System.out.println(Utility.overCreditMsg);
-                    } else {
+//                    if (quantity * unitPrice > customer.getRemainingCredits()) {
+//                        System.out.println(Utility.overCreditMsg);
+//                    } else
+//                        {
                         if (storeAndItemsProvider.getAllStoresWithItems().containsKey(storeName)) {
                             StoreAndItems currentStoreAndItems = storeAndItemsProvider.getAllStoresWithItems().get(storeName);
                             if (currentStoreAndItems.getAllItems().containsKey(itemName)) {
                                 Item targetItem = currentStoreAndItems.getAllItems().get(itemName);
                                 Drone targetDrone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
                                 int itemsWeight = targetItem.getUnitWeight() * quantity;
-                                if (targetDrone.getRemainingCap() < itemsWeight) {
-                                    System.out.println(Utility.overWeightMsg);
-                                } else {
+//                                if (targetDrone.getRemainingCap() < itemsWeight) {
+//                                    System.out.println(Utility.overWeightMsg);
+//                                } else {
                                     //Finally add new item to order!
                                     addRequestedItem(targetOrder, targetItem, customer, targetDrone, itemsWeight, orderPrice, quantity);
-                                }
+                                //}
                             } else {
                                 System.out.println(Utility.nonExistingItemMsg);
                             }
                         } else {
                             System.out.println("DEBUG: " + storeName + " not exist in allStoresWithItems");
                         }
-                    }
+                    //}
                 } else {
                     System.out.println(Utility.nonExistingOrderMsg);
                 }
@@ -194,7 +195,7 @@ public class OrderProvider {
         }
     }
 
-    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int itemsWeight, int orderPrice, int quantity) {
+    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone targetDrone, int itemsWeight, int orderPrice, int quantity) {
         boolean isSuccess = true;
         TreeMap<String, OrderItem> requestedItems = targetOrder.getRequestedItems();
         if (requestedItems.containsKey(item.getName())) {
@@ -202,15 +203,25 @@ public class OrderProvider {
             isSuccess = false;
         }
 
+        if (isSuccess && orderPrice > customer.getRemainingCredits()) {
+            System.out.println(Utility.overCreditMsg);
+            isSuccess = false;
+        }
+
+        if (isSuccess && targetDrone.getRemainingCap() < itemsWeight) {
+            System.out.println(Utility.overWeightMsg);
+            isSuccess = false;
+        }
+
         int remainingCredits = customer.getRemainingCredits();
         int updatedCredits = remainingCredits - orderPrice;
-        if (updatedCredits < 0) {
+        if (isSuccess && updatedCredits < 0) {
             System.out.println("DEBUG: illegal credit: " + updatedCredits);
             isSuccess = false;
         }
 
-        int updatedWeight = drone.getRemainingCap() - itemsWeight;
-        if (updatedWeight < 0) {
+        int updatedWeight = targetDrone.getRemainingCap() - itemsWeight;
+        if (isSuccess && updatedWeight < 0) {
             System.out.println("DEBUG: illegal weight: " + updatedWeight);
             isSuccess = false;
         }
@@ -224,7 +235,7 @@ public class OrderProvider {
             orderItem.setTotalWeight(itemsWeight + orderItem.getTotalWeight());
             requestedItems.put(item.getName(), orderItem);
             customer.setRemainingCredits(remainingCredits - orderPrice);
-            drone.setRemainingCap(updatedWeight);
+            targetDrone.setRemainingCap(updatedWeight);
             System.out.println(Utility.changeCompleteMsg);
         }
     }
