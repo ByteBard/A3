@@ -115,14 +115,15 @@ public class OrderProvider {
 
         Order targetOrder = currentOrders.get(orderID);
         Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
-        if (targetDrone.getRemainingTrips() == 0) {
-            System.out.println(Utility.notEnoughFuelMsg);
-            return false;
-        }
 
         Pilot matchedPilot = flyDroneProvider.getPilotDroneBiPair().getDroneToPilot().get(targetDrone.getComboID());
         if (matchedPilot == null) {
             System.out.println(Utility.noPilotMsg);
+            return false;
+        }
+
+        if (targetDrone.getRemainingTrips() == 0) {
+            System.out.println(Utility.notEnoughFuelMsg);
             return false;
         }
 
