@@ -1,4 +1,5 @@
 package edu.gatech.cs6310;
+
 import java.util.Scanner;
 
 public class DeliveryService {
@@ -71,9 +72,7 @@ public class DeliveryService {
                 else if (tokens[0].equals("display_pilots")) {
                     pilotProvider.displayAllPilots();
 //                    System.out.println("no parameters needed");
-                }
-
-                else if (tokens[0].equals("make_drone")) {
+                } else if (tokens[0].equals("make_drone")) {
                     String storeName = tokens[1];
                     String droneID = tokens[2];
                     int totalCap = Integer.parseInt(tokens[3]);
@@ -146,6 +145,8 @@ public class DeliveryService {
                     System.out.println("stop acknowledged");
                     break;
 
+                } else if (wholeInputLine.contains("//")) {
+                    System.out.println(wholeInputLine);
                 } else {
                     System.out.println("command " + tokens[0] + " NOT acknowledged");
                 }
