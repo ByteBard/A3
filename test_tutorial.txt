@@ -1,0 +1,27 @@
+
+//Batch Mode
+-> open powershell (admin mode)
+//go to project root
+-> cd "C:\2022-01-A3-master"
+//build docker image, like recompiling
+-> docker build -t gatech/dronedelivery -f Dockerfile ./
+//run batch command and output results
+-> .\scripts\batch.sh
+//then you can find the outputs in "C:\2022-01-A3-master\docker_results\
+//batch_results.txt is the most important file that tells you if your output is identical to the standard output or not!
+
+-----------------------------------------------------------------------------------------------------------------------
+
+// Single Command Mode
+-> open powershell (admin mode)
+//go to project root
+-> cd "C:\2022-01-A3-master"
+//build docker image, like recompiling
+-> docker build -t gatech/dronedelivery -f Dockerfile ./
+//run docker container
+-> docker run -ti gatech/dronedelivery sh
+//run java built jar
+java -jar drone_delivery.jar
+
+(if successful, will display: Welcome to the Grocery Express Delivery Service!)
+
