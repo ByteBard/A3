@@ -39,7 +39,7 @@ public class PilotProvider {
                 "name:" + Utility.getFullName(pilot.getFirstName(), pilot.getLastName()) + "," +
                 "phone:" + pilot.getPhoneNum() + "," +
                 "taxID:" + pilot.getTaxID() + "," +
-                "licenceID:" + pilot.getLicenceID() + "," +
+                "licenseID:" + pilot.getLicenceID() + "," +
                 "experience:" + pilot.getExperienceCount()
                 );
     }

@@ -70,7 +70,8 @@ public class FlyDroneProvider {
                 }
                 System.out.println(Utility.displayCompleteMsg);
             } else {
-                System.out.println("DEBUG: Empty Drones in: " + storeName);
+                //System.out.println("DEBUG: Empty Drones in: " + storeName);
+                System.out.println(Utility.displayCompleteMsg);
             }
         } else {
             System.out.println(Utility.nonExistingStoreMsg);

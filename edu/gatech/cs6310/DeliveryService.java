@@ -145,11 +145,12 @@ public class DeliveryService {
                     System.out.println("stop acknowledged");
                     break;
 
-                } else if (wholeInputLine.contains("//")) {
-                    System.out.println(wholeInputLine);
-                } else {
-                    System.out.println("command " + tokens[0] + " NOT acknowledged");
                 }
+//                else if (wholeInputLine.contains("//")) {
+//                    System.out.println(wholeInputLine);
+//                } else {
+//                    System.out.println("command " + tokens[0] + " NOT acknowledged");
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println();
