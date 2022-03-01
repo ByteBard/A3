@@ -86,15 +86,25 @@ public class OrderProvider {
         }
 
         Order targetOrder = currentOrders.get(orderID);
-        Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
         Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
-        Pilot matchedPilot = flyDroneProvider.getPilotDroneBiPair().getDroneToPilot().get(targetDrone.getComboID());
+        if (targetDrone.getRemainingTrips() == 0) {
+            System.out.println(Utility.notEnoughFuelMsg);
+            return false;
+        }
 
+        Pilot matchedPilot = flyDroneProvider.getPilotDroneBiPair().getDroneToPilot().get(targetDrone.getComboID());
+        if (matchedPilot == null) {
+            System.out.println(Utility.noPilotMsg);
+            return false;
+        }
+
+        Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
         customer.setTotalCredits(customer.getTotalCredits() - targetOrder.getTotalPrice());
         Store store = flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().GetByStoreName(storeName);
         store.setRevenue(store.getRevenue() + targetOrder.getTotalPrice());
         targetDrone.completeOneTrip();
         targetDrone.pendingOrderDown();
+        targetDrone.setRemainingCap(targetDrone.getRemainingCap() + targetOrder.getTotalWeight());
         matchedPilot.completeOneDelivery();
         currentOrders.remove(orderID);
         System.out.println(Utility.changeCompleteMsg);
@@ -131,12 +141,12 @@ public class OrderProvider {
                             if (currentStoreAndItems.getAllItems().containsKey(itemName)) {
                                 Item targetItem = currentStoreAndItems.getAllItems().get(itemName);
                                 Drone targetDrone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
-                                int orderWeight = targetItem.getUnitWeight() * quantity;
-                                if (targetDrone.getRemainingCap() < orderWeight) {
+                                int itemsWeight = targetItem.getUnitWeight() * quantity;
+                                if (targetDrone.getRemainingCap() < itemsWeight) {
                                     System.out.println(Utility.overWeightMsg);
                                 } else {
                                     //Finally add new item to order!
-                                    addRequestedItem(targetOrder, targetItem, customer, targetDrone, orderWeight, orderPrice, quantity);
+                                    addRequestedItem(targetOrder, targetItem, customer, targetDrone, itemsWeight, orderPrice, quantity);
                                 }
                             } else {
                                 System.out.println(Utility.nonExistingItemMsg);
@@ -156,7 +166,7 @@ public class OrderProvider {
         }
     }
 
-    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int orderWeight, int orderPrice, int quantity) {
+    public void addRequestedItem(Order targetOrder, Item item, Customer customer, Drone drone, int itemsWeight, int orderPrice, int quantity) {
         boolean isSuccess = true;
         TreeMap<String, OrderItem> requestedItems = targetOrder.getRequestedItems();
         if (requestedItems.containsKey(item.getName())) {
@@ -171,7 +181,7 @@ public class OrderProvider {
             isSuccess = false;
         }
 
-        int updatedWeight = drone.getRemainingCap() - orderWeight;
+        int updatedWeight = drone.getRemainingCap() - itemsWeight;
         if (updatedWeight < 0) {
             System.out.println("DEBUG: illegal weight: " + updatedWeight);
             isSuccess = false;
@@ -179,10 +189,11 @@ public class OrderProvider {
 
         if (isSuccess) {
             targetOrder.setTotalPrice(targetOrder.getTotalPrice() + orderPrice);
+            targetOrder.setTotalWeight(targetOrder.getTotalWeight() + itemsWeight);
             OrderItem orderItem = new OrderItem(item.getName(), 0, 0, 0);
             orderItem.setQuantity(quantity + orderItem.getQuantity());
             orderItem.setTotalPrice(orderPrice + orderItem.getTotalPrice());
-            orderItem.setTotalWeight(orderWeight + orderItem.getTotalWeight());
+            orderItem.setTotalWeight(itemsWeight + orderItem.getTotalWeight());
             requestedItems.put(item.getName(), orderItem);
             customer.setRemainingCredits(remainingCredits - orderPrice);
             drone.setRemainingCap(updatedWeight);

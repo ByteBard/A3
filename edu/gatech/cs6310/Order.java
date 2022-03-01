@@ -9,6 +9,7 @@ public class Order {
     private String droneID;
     private TreeMap<String, OrderItem> requestedItems;
     private int totalPrice;
+    private int totalWeight;
 
     public Order(String orderID, String storeName, String customerAcc, String droneID) {
         this.orderID = orderID;
@@ -17,6 +18,15 @@ public class Order {
         this.droneID = droneID;
         requestedItems = new TreeMap<>();
         totalPrice = 0;
+        totalWeight = 0;
+    }
+
+    public int getTotalWeight() {
+        return totalWeight;
+    }
+
+    public void setTotalWeight(int totalWeight) {
+        this.totalWeight = totalWeight;
     }
 
     public int getTotalPrice() {

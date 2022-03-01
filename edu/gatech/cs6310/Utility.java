@@ -19,6 +19,8 @@ public class Utility {
     public static String duplicateItemInOrderMsg = "ERROR:item_already_ordered";
     public static String overCreditMsg = "ERROR:customer_cant_afford_new_item";
     public static String overWeightMsg = "ERROR:drone_cant_carry_new_item";
+    public static String notEnoughFuelMsg = "ERROR:drone_needs_fuel";
+    public static String noPilotMsg = "ERROR:drone_needs_pilot";
 
     public static String getFullName(String firstName, String lastName){
         return firstName + "_" + lastName;
