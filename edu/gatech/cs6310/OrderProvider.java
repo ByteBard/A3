@@ -68,6 +68,34 @@ public class OrderProvider {
         }
     }
 
+    public boolean cancelOrderSuccess(String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
+        if (!flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+            System.out.println(Utility.nonExistingStoreMsg);
+            return false;
+        }
+
+        if (!storeOrdersMap.containsKey(storeName)) {
+            System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+            return false;
+        }
+
+        TreeMap<String, Order> currentOrders = storeOrdersMap.get(storeName);
+        if (!currentOrders.containsKey(orderID)) {
+            System.out.println(Utility.nonExistingOrderMsg);
+            return false;
+        }
+
+        Order targetOrder = currentOrders.get(orderID);
+        Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+        Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
+        customer.setRemainingCredits(customer.getRemainingCredits() + targetOrder.getTotalPrice());
+        targetDrone.pendingOrderDown();
+        targetDrone.setRemainingCap(targetDrone.getRemainingCap() + targetOrder.getTotalWeight());
+        currentOrders.remove(orderID);
+        System.out.println(Utility.changeCompleteMsg);
+        return true;
+    }
+
     public boolean purchaseOrderSuccess(String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
         if (!flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
             System.out.println(Utility.nonExistingStoreMsg);

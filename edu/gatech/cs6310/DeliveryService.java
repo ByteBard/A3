@@ -137,7 +137,10 @@ public class DeliveryService {
 //                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
 
                 } else if (tokens[0].equals("cancel_order")) {
-                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
+                    String storeName = tokens[1];
+                    String orderID = tokens[2];
+                    orderProvider.cancelOrderSuccess(storeName, orderID, flyDroneProvider, customerProvider);
+//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
 
                 } else if (tokens[0].equals("stop")) {
                     System.out.println("stop acknowledged");
