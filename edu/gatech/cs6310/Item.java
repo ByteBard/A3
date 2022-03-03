@@ -13,16 +13,8 @@ public class Item {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getUnitWeight() {
         return unitWeight;
-    }
-
-    public void setUnitWeight(int unitWeight) {
-        this.unitWeight = unitWeight;
     }
 
 }

@@ -25,40 +25,20 @@ public class Drone {
         return pendingOrderNum;
     }
 
-    public void setPendingOrderNum(int pendingOrderNum) {
-        this.pendingOrderNum = pendingOrderNum;
-    }
-
     public String getComboID() {
         return comboID;
-    }
-
-    public void setComboID(String comboID) {
-        this.comboID = comboID;
     }
 
     public String getStoreName() {
         return storeName;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
     public String getDroneID() {
         return droneID;
     }
 
-    public void setDroneID(String droneID) {
-        this.droneID = droneID;
-    }
-
     public int getTotalCap() {
         return totalCap;
-    }
-
-    public void setTotalCap(int totalCap) {
-        this.totalCap = totalCap;
     }
 
     public int getRemainingCap() {
@@ -69,20 +49,8 @@ public class Drone {
         this.remainingCap = remainingCap;
     }
 
-    public int getTotalTrips() {
-        return totalTrips;
-    }
-
-    public void setTotalTrips(int totalTrips) {
-        this.totalTrips = totalTrips;
-    }
-
     public int getRemainingTrips() {
         return remainingTrips;
-    }
-
-    public void setRemainingTrips(int remainingTrips) {
-        this.remainingTrips = remainingTrips;
     }
 
     public void completeOneTrip() {

@@ -11,10 +11,10 @@ public class DeliveryService {
         final String DELIMITER = ",";
 
         StoreProvider storeProvider = new StoreProvider();
-        StoreAndItemsProvider storeAndItemsProvider = new StoreAndItemsProvider(storeProvider);
+        StoreItemsProvider storeItemsProvider = new StoreItemsProvider();
         PilotProvider pilotProvider = new PilotProvider();
-        StoreAndDronesProvider storeAndDronesProvider = new StoreAndDronesProvider(storeProvider);
-        FlyDroneProvider flyDroneProvider = new FlyDroneProvider(storeAndDronesProvider, pilotProvider);
+        StoreDronesProvider storeDronesProvider = new StoreDronesProvider();
+        FlyDroneProvider flyDroneProvider = new FlyDroneProvider();
         CustomerProvider customerProvider = new CustomerProvider();
         OrderProvider orderProvider = new OrderProvider();
         while (true) {
@@ -43,14 +43,14 @@ public class DeliveryService {
                     String itemName = tokens[2];
                     int unitWeight = Integer.parseInt(tokens[3]);
 //                    System.out.println("store: " + storeName + ", item: " + itemName + ", weight: " + itemWeight);7
-                    storeAndItemsProvider.sellItemForStore(storeName, itemName, unitWeight);
+                    storeItemsProvider.sellItemForStore(storeProvider, storeName, itemName, unitWeight);
                 }
 
                 //Display Items
                 else if (tokens[0].equals("display_items")) {
 //                    System.out.println("store: " + tokens[1]);
                     String storeName = tokens[1];
-                    storeAndItemsProvider.displayStoreItems(storeName);
+                    storeItemsProvider.displayStoreItems(storeName, storeProvider);
                 }
 
                 //Make Pilot
@@ -77,19 +77,19 @@ public class DeliveryService {
                     String droneID = tokens[2];
                     int totalCap = Integer.parseInt(tokens[3]);
                     int tripsInitial = Integer.parseInt(tokens[4]);
-                    storeAndDronesProvider.addDroneToStore(storeName, droneID, totalCap, tripsInitial);
+                    storeDronesProvider.addDroneToStore(storeProvider, storeName, droneID, totalCap, tripsInitial);
 //                    System.out.println("store: " + tokens[1] + ", drone: " + tokens[2] + ", capacity: " + tokens[3] + ", fuel: " + tokens[4]);
 
                 } else if (tokens[0].equals("display_drones")) {
                     String storeName = tokens[1];
-                    flyDroneProvider.displayDronesForStore(storeName);
+                    flyDroneProvider.displayDronesForStore(storeProvider, storeDronesProvider, storeName);
 //                    System.out.println("store: " + tokens[1]);
 
                 } else if (tokens[0].equals("fly_drone")) {
                     String storeName = tokens[1];
                     String droneID = tokens[2];
                     String pilotAcc = tokens[3];
-                    flyDroneProvider.flyDrone(storeName, droneID, pilotAcc);
+                    flyDroneProvider.flyDrone(storeProvider, pilotProvider, storeDronesProvider, storeName, droneID, pilotAcc);
 //                    System.out.println("store: " + tokens[1] + ", drone: " + tokens[2] + ", pilot: " + tokens[3]);
 
                 } else if (tokens[0].equals("make_customer")) {
@@ -112,7 +112,7 @@ public class DeliveryService {
                     String orderID = tokens[2];
                     String droneID = tokens[3];
                     String customerAcc = tokens[4];
-                    orderProvider.startOrderForStore(storeName, orderID, droneID, customerAcc, storeAndDronesProvider, customerProvider);
+                    orderProvider.startOrderForStore(storeProvider, storeName, orderID, droneID, customerAcc, storeDronesProvider, customerProvider);
 //                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", drone: " + tokens[3] + ", customer: " + tokens[4]);
 
                 } else if (tokens[0].equals("display_orders")) {
@@ -126,19 +126,19 @@ public class DeliveryService {
                     String itemName = tokens[3];
                     int quantity = Integer.parseInt(tokens[4]);
                     int unitPrice = Integer.parseInt(tokens[5]);
-                    orderProvider.requestItem(storeName, orderID, itemName, quantity, unitPrice, storeAndDronesProvider, storeAndItemsProvider, customerProvider);
+                    orderProvider.requestItem(storeProvider, storeName, orderID, itemName, quantity, unitPrice, storeDronesProvider, storeItemsProvider, customerProvider);
 //                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", item: " + tokens[3] + ", quantity: " + tokens[4] + ", unit_price: " + tokens[5]);
 
                 } else if (tokens[0].equals("purchase_order")) {
                     String storeName = tokens[1];
                     String orderID = tokens[2];
-                    orderProvider.purchaseOrderSuccess(storeName, orderID, flyDroneProvider, customerProvider);
+                    orderProvider.purchaseOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
 //                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
 
                 } else if (tokens[0].equals("cancel_order")) {
                     String storeName = tokens[1];
                     String orderID = tokens[2];
-                    orderProvider.cancelOrderSuccess(storeName, orderID, flyDroneProvider, customerProvider);
+                    orderProvider.cancelOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
 //                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
 
                 } else if (tokens[0].equals("stop")) {

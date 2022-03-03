@@ -17,10 +17,6 @@ public class OrderItem {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getTotalWeight() {
         return totalWeight;
     }

@@ -13,10 +13,6 @@ public class Store {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getRevenue() {
         return revenue;
     }

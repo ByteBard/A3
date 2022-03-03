@@ -8,10 +8,6 @@ public class StoreProvider {
         return allStoresWithNameMap;
     }
 
-    public void setAllStoresWithNameMap(TreeMap<String, Store> allStoresWithNameMap) {
-        this.allStoresWithNameMap = allStoresWithNameMap;
-    }
-
     public StoreProvider() {
         allStoresWithNameMap = new TreeMap<>();
     }

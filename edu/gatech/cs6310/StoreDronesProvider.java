@@ -3,24 +3,18 @@ package edu.gatech.cs6310;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-public class StoreAndDronesProvider {
+public class StoreDronesProvider {
     private HashMap<String, TreeMap<String, Drone>> storeDronesWithStoreNameMap;
-    private StoreProvider storeProvider;
 
     public HashMap<String, TreeMap<String, Drone>> getStoreDronesWithStoreNameMap() {
         return storeDronesWithStoreNameMap;
     }
 
-    public StoreProvider getStoreProvider() {
-        return storeProvider;
-    }
-
-    public StoreAndDronesProvider(StoreProvider storeProvider) {
+    public StoreDronesProvider() {
         this.storeDronesWithStoreNameMap = new HashMap<>();
-        this.storeProvider = storeProvider;
     }
 
-    public void addDroneToStore(String storeName, String droneID, int totalCap, int totalTrips) {
+    public void addDroneToStore(StoreProvider storeProvider, String storeName, String droneID, int totalCap, int totalTrips) {
         Drone drone = new Drone(storeName, droneID, totalCap, totalCap, totalTrips, totalTrips);
         if (storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             if (storeDronesWithStoreNameMap.containsKey(storeName)) {

@@ -10,19 +10,15 @@ public class OrderProvider {
         storeOrdersMap = new HashMap<>();
     }
 
-    public HashMap<String, TreeMap<String, Order>> getStoreOrdersMap() {
-        return storeOrdersMap;
-    }
-
     public void addOrderToStore(String storeName, String orderID, String droneID, String customerAcc,
-                                StoreAndDronesProvider storeAndDronesProvider, CustomerProvider customerProvider,
+                                StoreDronesProvider storeDronesProvider, CustomerProvider customerProvider,
                                 TreeMap<String, Order> currentOrders) {
-        if (storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).containsKey(droneID)) {
-            Drone drone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(droneID);
+        if (storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).containsKey(droneID)) {
+            Drone drone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(droneID);
             if (!customerProvider.getAllCustomers().containsKey(customerAcc)) {
                 System.out.println(Utility.nonExistingCustomerMsg);
             } else {
-                Order order = new Order(orderID, storeName, customerAcc, droneID);
+                Order order = new Order(orderID, customerAcc, droneID);
                 currentOrders.put(orderID, order);
                 storeOrdersMap.put(storeName, currentOrders);
                 drone.pendingOrderNumUp();
@@ -33,19 +29,19 @@ public class OrderProvider {
         }
     }
 
-    public void startOrderForStore(String storeName, String orderID, String droneID, String customerAcc,
-                                   StoreAndDronesProvider storeAndDronesProvider, CustomerProvider customerProvider) {
-        if (storeAndDronesProvider.getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+    public void startOrderForStore(StoreProvider storeProvider, String storeName, String orderID, String droneID, String customerAcc,
+                                   StoreDronesProvider storeDronesProvider, CustomerProvider customerProvider) {
+        if (storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             if (storeOrdersMap.containsKey(storeName)) {
                 TreeMap<String, Order> currentOrders = storeOrdersMap.get(storeName);
                 if (currentOrders.containsKey(orderID)) {
                     System.out.println(Utility.duplicateOrderIDMsg);
                 } else {
-                    addOrderToStore(storeName, orderID, droneID, customerAcc, storeAndDronesProvider, customerProvider, currentOrders);
+                    addOrderToStore(storeName, orderID, droneID, customerAcc, storeDronesProvider, customerProvider, currentOrders);
                 }
             } else {
                 TreeMap<String, Order> defaultOrders = new TreeMap<>();
-                addOrderToStore(storeName, orderID, droneID, customerAcc, storeAndDronesProvider, customerProvider, defaultOrders);
+                addOrderToStore(storeName, orderID, droneID, customerAcc, storeDronesProvider, customerProvider, defaultOrders);
             }
         } else {
             System.out.println(Utility.nonExistingStoreMsg);
@@ -68,8 +64,8 @@ public class OrderProvider {
         }
     }
 
-    public boolean cancelOrderSuccess(String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
-        if (!flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+    public boolean cancelOrderSuccess(StoreProvider storeProvider, StoreDronesProvider storeDronesProvider, String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
+        if (!storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             System.out.println(Utility.nonExistingStoreMsg);
             return false;
         }
@@ -86,7 +82,7 @@ public class OrderProvider {
         }
 
         Order targetOrder = currentOrders.get(orderID);
-        Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+        Drone targetDrone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
         Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
         customer.setRemainingCredits(customer.getRemainingCredits() + targetOrder.getTotalPrice());
         targetDrone.pendingOrderDown();
@@ -96,8 +92,8 @@ public class OrderProvider {
         return true;
     }
 
-    public boolean purchaseOrderSuccess(String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
-        if (!flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+    public boolean purchaseOrderSuccess(StoreProvider storeProvider, StoreDronesProvider storeDronesProvider, String storeName, String orderID, FlyDroneProvider flyDroneProvider, CustomerProvider customerProvider) {
+        if (!storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             System.out.println(Utility.nonExistingStoreMsg);
             return false;
         }
@@ -114,9 +110,9 @@ public class OrderProvider {
         }
 
         Order targetOrder = currentOrders.get(orderID);
-        Drone targetDrone = flyDroneProvider.getStoreAndDronesProvider().getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+        Drone targetDrone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
 
-        Pilot matchedPilot = flyDroneProvider.getPilotDroneBiPair().getDroneToPilot().get(targetDrone.getComboID());
+        Pilot matchedPilot = flyDroneProvider.getPilotsDronesPool().getDroneToPilot().get(targetDrone.getComboID());
         if (matchedPilot == null) {
             System.out.println(Utility.noPilotMsg);
             return false;
@@ -129,7 +125,7 @@ public class OrderProvider {
 
         Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
         customer.setTotalCredits(customer.getTotalCredits() - targetOrder.getTotalPrice());
-        Store store = flyDroneProvider.getStoreAndDronesProvider().getStoreProvider().GetByStoreName(storeName);
+        Store store = storeProvider.GetByStoreName(storeName);
         store.setRevenue(store.getRevenue() + targetOrder.getTotalPrice());
         targetDrone.completeOneTrip();
         targetDrone.pendingOrderDown();
@@ -153,9 +149,9 @@ public class OrderProvider {
         }
     }
 
-    public void requestItem(String storeName, String orderID, String itemName, int quantity, int unitPrice,
-                            StoreAndDronesProvider storeAndDronesProvider, StoreAndItemsProvider storeAndItemsProvider, CustomerProvider customerProvider) {
-        if (storeAndDronesProvider.getStoreProvider().getAllStoresWithNameMap().containsKey(storeName)) {
+    public void requestItem(StoreProvider storeProvider, String storeName, String orderID, String itemName, int quantity, int unitPrice,
+                            StoreDronesProvider storeDronesProvider, StoreItemsProvider storeItemsProvider, CustomerProvider customerProvider) {
+        if (storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             if (storeOrdersMap.containsKey(storeName)) {
                 TreeMap<String, Order> currentOrders = storeOrdersMap.get(storeName);
                 if (currentOrders.containsKey(orderID)) {
@@ -166,11 +162,11 @@ public class OrderProvider {
 //                        System.out.println(Utility.overCreditMsg);
 //                    } else
 //                        {
-                        if (storeAndItemsProvider.getAllStoresWithItems().containsKey(storeName)) {
-                            StoreAndItems currentStoreAndItems = storeAndItemsProvider.getAllStoresWithItems().get(storeName);
-                            if (currentStoreAndItems.getAllItems().containsKey(itemName)) {
-                                Item targetItem = currentStoreAndItems.getAllItems().get(itemName);
-                                Drone targetDrone = storeAndDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+                        if (storeItemsProvider.getAllStoresWithItems().containsKey(storeName)) {
+                            ItemPool currentItemPool = storeItemsProvider.getAllStoresWithItems().get(storeName);
+                            if (currentItemPool.getAllItems().containsKey(itemName)) {
+                                Item targetItem = currentItemPool.getAllItems().get(itemName);
+                                Drone targetDrone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
                                 int itemsWeight = targetItem.getUnitWeight() * quantity;
 //                                if (targetDrone.getRemainingCap() < itemsWeight) {
 //                                    System.out.println(Utility.overWeightMsg);

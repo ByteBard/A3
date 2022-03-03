@@ -14,56 +14,28 @@ public class Pilot {
         return account;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPhoneNum() {
         return phoneNum;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
     }
 
     public String getTaxID() {
         return taxID;
     }
 
-    public void setTaxID(String taxID) {
-        this.taxID = taxID;
-    }
-
     public String getLicenceID() {
         return licenceID;
     }
 
-    public void setLicenceID(String licenceID) {
-        this.licenceID = licenceID;
-    }
-
     public int getExperienceCount() {
         return experienceCount;
-    }
-
-    public void setExperienceCount(int experienceCount) {
-        this.experienceCount = experienceCount;
     }
 
     public void completeOneDelivery(){

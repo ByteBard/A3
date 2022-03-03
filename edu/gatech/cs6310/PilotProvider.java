@@ -16,10 +16,6 @@ public class PilotProvider {
         return allPilotsWithAccountMap;
     }
 
-    public HashSet<String> getAllPilotsLicences() {
-        return allPilotsLicences;
-    }
-
     public void addNewPilot(String account, String firstName, String lastName, String phoneNum, String taxId, String licenceNum, int experienceCount) {
         Pilot pilot = new Pilot(account, firstName, lastName, phoneNum, taxId, licenceNum, experienceCount);
         if (allPilotsWithAccountMap.containsKey(account)) {

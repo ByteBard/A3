@@ -3,30 +3,24 @@ package edu.gatech.cs6310;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-public class StoreAndItemsProvider {
-    private HashMap<String, StoreAndItems> allStoresWithItems;
-    private StoreProvider storeProvider;
+public class StoreItemsProvider {
+    private HashMap<String, ItemPool> allStoresWithItems;
 
-    public StoreAndItemsProvider(StoreProvider storeProvider) {
-        this.allStoresWithItems = new HashMap<String, StoreAndItems>();
-        this.storeProvider = storeProvider;
+    public StoreItemsProvider() {
+        this.allStoresWithItems = new HashMap<String, ItemPool>();
     }
 
-    public HashMap<String, StoreAndItems> getAllStoresWithItems() {
+    public HashMap<String, ItemPool> getAllStoresWithItems() {
         return allStoresWithItems;
     }
 
-    public void setAllStoresWithItems(HashMap<String, StoreAndItems> allStoresWithItems) {
-        this.allStoresWithItems = allStoresWithItems;
-    }
-
-    public void displayStoreItems(String storeName){
+    public void displayStoreItems(String storeName, StoreProvider storeProvider){
         if(!storeProvider.getAllStoresWithNameMap().containsKey(storeName)){
             System.out.println(Utility.nonExistingStoreMsg);
         }else {
             if(allStoresWithItems.containsKey(storeName)){
-                StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
-                for (Item item: existingStoreAndItems.getAllItems().values()) {
+                ItemPool existingItemPool = allStoresWithItems.get(storeName);
+                for (Item item: existingItemPool.getAllItems().values()) {
                     System.out.println(item.getName() + "," + item.getUnitWeight());
                 }
                 System.out.println(Utility.displayCompleteMsg);
@@ -36,7 +30,7 @@ public class StoreAndItemsProvider {
         }
     }
 
-    public void sellItemForStore(String storeName, String itemName, int unitWeight) {
+    public void sellItemForStore(StoreProvider storeProvider, String storeName, String itemName, int unitWeight) {
         if (!storeProvider.getAllStoresWithNameMap().containsKey(storeName)) {
             System.out.println(Utility.nonExistingStoreMsg);
         } else {
@@ -46,12 +40,12 @@ public class StoreAndItemsProvider {
             } else {
                 Item item = new Item(itemName, unitWeight);
                 if(allStoresWithItems.containsKey(storeName)){
-                    StoreAndItems existingStoreAndItems = allStoresWithItems.get(storeName);
-                    existingStoreAndItems.sellNewItemForStore(item);
+                    ItemPool existingItemPool = allStoresWithItems.get(storeName);
+                    existingItemPool.sellNewItemForStore(item);
                 }else{
                     TreeMap<String, Item> defaultItemList = new TreeMap<>();
                     defaultItemList.put(itemName, item);
-                    allStoresWithItems.put(storeName, new StoreAndItems(store, defaultItemList));
+                    allStoresWithItems.put(storeName, new ItemPool(defaultItemList));
                     System.out.println(Utility.changeCompleteMsg);
                 }
             }
