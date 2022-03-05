@@ -22,14 +22,14 @@ public class FlyDroneProvider {
                     if (currentDronesForStore.containsKey(droneID)) {
                         Drone droneToBeAssigned = currentDronesForStore.get(droneID);
                         if (!(droneToBeAssigned.getStoreName()).equals(storeName)) {
-                            System.out.println("DEBUG: " + storeName + " has drone with different storeName: " + droneToBeAssigned.getStoreName());
+                            //System.out.println("DEBUG: " + storeName + " has drone with different storeName: " + droneToBeAssigned.getStoreName());
                         }
                         pilotsDronesPool.updatePool(pilotToBeAssigned, droneToBeAssigned);
                     } else {
                         System.out.println(Utility.nonExistingDroneIdMsg);
                     }
                 } else {
-                    System.out.println("DEBUG: " + storeName + " not Added to storeDronesWithStoreNameMap yet!");
+                   // System.out.println("DEBUG: " + storeName + " not Added to storeDronesWithStoreNameMap yet!");
                 }
 
             } else {

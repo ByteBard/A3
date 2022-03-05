@@ -22,8 +22,47 @@ public class Utility {
     public static String notEnoughFuelMsg = "ERROR:drone_needs_fuel";
     public static String noPilotMsg = "ERROR:drone_needs_pilot";
 
-    public static String getFullName(String firstName, String lastName){
+    public static String getFullName(String firstName, String lastName) {
         return firstName + "_" + lastName;
+    }
+
+    public static boolean isEmpty(String val) {
+        return val == null || val.isEmpty() || val.trim().isEmpty();
+    }
+
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    //function validates mobile numbers
+    //ref link: https://www.javatpoint.com/mobile-number-validation-in-java
+    public static boolean isValidateNumber(String mobNumber) {
+//validates phone numbers having 10 digits (9998887776)
+        if (mobNumber.matches("\\d{10}"))
+            return true;
+//validates phone numbers having digits, -, . or spaces
+        else if (mobNumber.matches("\\d{3}[-\\.\\s]\\d{3}[-\\.\\s]\\d{4}"))
+            return true;
+        else if (mobNumber.matches("\\d{4}[-\\.\\s]\\d{3}[-\\.\\s]\\d{3}"))
+            return true;
+//validates phone numbers having digits and extension (length 3 to 5)
+        else if (mobNumber.matches("\\d{3}-\\d{3}-\\d{4}\\s(x|(ext))\\d{3,5}"))
+            return true;
+//validates phone numbers having digits and area code in braces
+        else if (mobNumber.matches("\\(\\d{3}\\)-\\d{3}-\\d{4}"))
+            return true;
+        else if (mobNumber.matches("\\(\\d{5}\\)-\\d{3}-\\d{3}"))
+            return true;
+        else if (mobNumber.matches("\\(\\d{4}\\)-\\d{3}-\\d{3}"))
+            return true;
+//return false if any of the input matches is not found
+        else
+            return false;
     }
 }
 

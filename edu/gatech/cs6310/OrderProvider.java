@@ -57,7 +57,7 @@ public class OrderProvider {
                 }
                 System.out.println(Utility.displayCompleteMsg);
             } else {
-                System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+                //System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
             }
         } else {
             System.out.println(Utility.nonExistingStoreMsg);
@@ -71,7 +71,7 @@ public class OrderProvider {
         }
 
         if (!storeOrdersMap.containsKey(storeName)) {
-            System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+            //System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
             return false;
         }
 
@@ -99,7 +99,7 @@ public class OrderProvider {
         }
 
         if (!storeOrdersMap.containsKey(storeName)) {
-            System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+            //System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
             return false;
         }
 
@@ -158,34 +158,24 @@ public class OrderProvider {
                     Order targetOrder = currentOrders.get(orderID);
                     Customer customer = customerProvider.getAllCustomers().get(targetOrder.getCustomerAcc());
                     int orderPrice = quantity * unitPrice;
-//                    if (quantity * unitPrice > customer.getRemainingCredits()) {
-//                        System.out.println(Utility.overCreditMsg);
-//                    } else
-//                        {
-                        if (storeItemsProvider.getAllStoresWithItems().containsKey(storeName)) {
-                            ItemPool currentItemPool = storeItemsProvider.getAllStoresWithItems().get(storeName);
-                            if (currentItemPool.getAllItems().containsKey(itemName)) {
-                                Item targetItem = currentItemPool.getAllItems().get(itemName);
-                                Drone targetDrone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
-                                int itemsWeight = targetItem.getUnitWeight() * quantity;
-//                                if (targetDrone.getRemainingCap() < itemsWeight) {
-//                                    System.out.println(Utility.overWeightMsg);
-//                                } else {
-                                    //Finally add new item to order!
-                                    addRequestedItem(targetOrder, targetItem, customer, targetDrone, itemsWeight, orderPrice, quantity);
-                                //}
-                            } else {
-                                System.out.println(Utility.nonExistingItemMsg);
-                            }
+                    if (storeItemsProvider.getAllStoresWithItems().containsKey(storeName)) {
+                        ItemPool currentItemPool = storeItemsProvider.getAllStoresWithItems().get(storeName);
+                        if (currentItemPool.getAllItems().containsKey(itemName)) {
+                            Item targetItem = currentItemPool.getAllItems().get(itemName);
+                            Drone targetDrone = storeDronesProvider.getStoreDronesWithStoreNameMap().get(storeName).get(targetOrder.getDroneID());
+                            int itemsWeight = targetItem.getUnitWeight() * quantity;
+                            addRequestedItem(targetOrder, targetItem, customer, targetDrone, itemsWeight, orderPrice, quantity);
                         } else {
-                            System.out.println("DEBUG: " + storeName + " not exist in allStoresWithItems");
+                            System.out.println(Utility.nonExistingItemMsg);
                         }
-                    //}
+                    } else {
+                       // System.out.println("DEBUG: " + storeName + " not exist in allStoresWithItems");
+                    }
                 } else {
                     System.out.println(Utility.nonExistingOrderMsg);
                 }
             } else {
-                System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
+                //System.out.println("DEBUG: " + storeName + " not exist in storeOrdersMap");
             }
         } else {
             System.out.println(Utility.nonExistingStoreMsg);
@@ -213,13 +203,13 @@ public class OrderProvider {
         int remainingCredits = customer.getRemainingCredits();
         int updatedCredits = remainingCredits - orderPrice;
         if (isSuccess && updatedCredits < 0) {
-            System.out.println("DEBUG: illegal credit: " + updatedCredits);
+           // System.out.println("DEBUG: illegal credit: " + updatedCredits);
             isSuccess = false;
         }
 
         int updatedWeight = targetDrone.getRemainingCap() - itemsWeight;
         if (isSuccess && updatedWeight < 0) {
-            System.out.println("DEBUG: illegal weight: " + updatedWeight);
+            //System.out.println("DEBUG: illegal weight: " + updatedWeight);
             isSuccess = false;
         }
 

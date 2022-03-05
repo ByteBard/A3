@@ -26,10 +26,11 @@ public class DeliveryService {
 
                 //Make Store
                 if (tokens[0].equals("make_store")) {
-                    String storeName = tokens[1];
-                    int storeRevenue = Integer.parseInt(tokens[2]);
-//                    System.out.println("store: " + storeName + ", revenue: " + storeRevenue);
-                    storeProvider.AddNewStore(storeName, storeRevenue);
+                    if (!Utility.isEmpty(tokens[1]) && Utility.isInteger(tokens[2])) {
+                        String storeName = tokens[1];
+                        int storeRevenue = Integer.parseInt(tokens[2]);
+                        storeProvider.AddNewStore(storeName, storeRevenue);
+                    }
                 }
 
                 //Display Stores
@@ -39,118 +40,158 @@ public class DeliveryService {
 
                 //Sell Item
                 else if (tokens[0].equals("sell_item")) {
-                    String storeName = tokens[1];
-                    String itemName = tokens[2];
-                    int unitWeight = Integer.parseInt(tokens[3]);
-//                    System.out.println("store: " + storeName + ", item: " + itemName + ", weight: " + itemWeight);7
-                    storeItemsProvider.sellItemForStore(storeProvider, storeName, itemName, unitWeight);
+                    if (
+                            !Utility.isEmpty(tokens[1]) &&
+                                    !Utility.isEmpty(tokens[2])
+                    ) {
+                        String storeName = tokens[1];
+                        String itemName = tokens[2];
+                        int unitWeight = Integer.parseInt(tokens[3]);
+                        storeItemsProvider.sellItemForStore(storeProvider, storeName, itemName, unitWeight);
+                    }
                 }
 
                 //Display Items
                 else if (tokens[0].equals("display_items")) {
-//                    System.out.println("store: " + tokens[1]);
-                    String storeName = tokens[1];
-                    storeItemsProvider.displayStoreItems(storeName, storeProvider);
+                    if (
+                            !Utility.isEmpty(tokens[1])
+                    ) {
+                        String storeName = tokens[1];
+                        storeItemsProvider.displayStoreItems(storeName, storeProvider);
+                    }
                 }
 
                 //Make Pilot
                 else if (tokens[0].equals("make_pilot")) {
-                    String account = tokens[1];
-                    String firstName = tokens[2];
-                    String lastName = tokens[3];
-                    String phoneNum = tokens[4];
-                    String taxID = tokens[5];
-                    String licenceID = tokens[6];
-                    int experience = Integer.parseInt(tokens[7]);
-                    pilotProvider.addNewPilot(account, firstName, lastName, phoneNum, taxID, licenceID, experience);
-
-//                    System.out.print("account: " + tokens[1] + ", first_name: " + tokens[2] + ", last_name: " + tokens[3]);
-//                    System.out.println(", phone: " + tokens[4] + ", tax: " + tokens[5] + ", license: " + tokens[6] + ", experience: " + tokens[7]);
+                    if (
+                            !Utility.isEmpty(tokens[1]) &&
+                                    !Utility.isEmpty(tokens[2]) &&
+                                    !Utility.isEmpty(tokens[3]) &&
+                                    !Utility.isEmpty(tokens[4]) &&
+                                    !Utility.isEmpty(tokens[5]) &&
+                                    !Utility.isEmpty(tokens[6]) &&
+                                    Utility.isInteger(tokens[7]) &&
+                                    Utility.isValidateNumber(tokens[4])
+                    ) {
+                        String account = tokens[1];
+                        String firstName = tokens[2];
+                        String lastName = tokens[3];
+                        String phoneNum = tokens[4];
+                        String taxID = tokens[5];
+                        String licenceID = tokens[6];
+                        int experience = Integer.parseInt(tokens[7]);
+                        pilotProvider.addNewPilot(account, firstName, lastName, phoneNum, taxID, licenceID, experience);
+                    }
                 }
 
                 //Display Pilots
                 else if (tokens[0].equals("display_pilots")) {
                     pilotProvider.displayAllPilots();
-//                    System.out.println("no parameters needed");
                 } else if (tokens[0].equals("make_drone")) {
-                    String storeName = tokens[1];
-                    String droneID = tokens[2];
-                    int totalCap = Integer.parseInt(tokens[3]);
-                    int tripsInitial = Integer.parseInt(tokens[4]);
-                    storeDronesProvider.addDroneToStore(storeProvider, storeName, droneID, totalCap, tripsInitial);
-//                    System.out.println("store: " + tokens[1] + ", drone: " + tokens[2] + ", capacity: " + tokens[3] + ", fuel: " + tokens[4]);
-
+                    if (
+                            !Utility.isEmpty(tokens[1]) &&
+                                    !Utility.isEmpty(tokens[2]) &&
+                                    !Utility.isEmpty(tokens[3]) &&
+                                    !Utility.isEmpty(tokens[4]) &&
+                                    Utility.isInteger(tokens[3]) &&
+                                    Utility.isInteger(tokens[4])
+                    ) {
+                        String storeName = tokens[1];
+                        String droneID = tokens[2];
+                        int totalCap = Integer.parseInt(tokens[3]);
+                        int tripsInitial = Integer.parseInt(tokens[4]);
+                        storeDronesProvider.addDroneToStore(storeProvider, storeName, droneID, totalCap, tripsInitial);
+                    }
                 } else if (tokens[0].equals("display_drones")) {
                     String storeName = tokens[1];
-                    flyDroneProvider.displayDronesForStore(storeProvider, storeDronesProvider, storeName);
-//                    System.out.println("store: " + tokens[1]);
-
+                    if (!Utility.isEmpty(tokens[1])) {
+                        flyDroneProvider.displayDronesForStore(storeProvider, storeDronesProvider, storeName);
+                    }
                 } else if (tokens[0].equals("fly_drone")) {
-                    String storeName = tokens[1];
-                    String droneID = tokens[2];
-                    String pilotAcc = tokens[3];
-                    flyDroneProvider.flyDrone(storeProvider, pilotProvider, storeDronesProvider, storeName, droneID, pilotAcc);
-//                    System.out.println("store: " + tokens[1] + ", drone: " + tokens[2] + ", pilot: " + tokens[3]);
-
+                    if (!Utility.isEmpty(tokens[1]) &&
+                            !Utility.isEmpty(tokens[2]) &&
+                            !Utility.isEmpty(tokens[3])) {
+                        String storeName = tokens[1];
+                        String droneID = tokens[2];
+                        String pilotAcc = tokens[3];
+                        flyDroneProvider.flyDrone(storeProvider, pilotProvider, storeDronesProvider, storeName, droneID, pilotAcc);
+                    }
                 } else if (tokens[0].equals("make_customer")) {
-                    String customerAcc = tokens[1];
-                    String firstName = tokens[2];
-                    String lastName = tokens[3];
-                    String phoneNum = tokens[4];
-                    int rating = Integer.parseInt(tokens[5]);
-                    int credits = Integer.parseInt(tokens[6]);
-                    customerProvider.addNewCustomer(customerAcc, firstName, lastName, phoneNum, rating, credits);
-//                    System.out.print("account: " + tokens[1] + ", first_name: " + tokens[2] + ", last_name: " + tokens[3]);
-//                    System.out.println(", phone: " + tokens[4] + ", rating: " + tokens[5] + ", credit: " + tokens[6]);
-
+                    if (
+                            !Utility.isEmpty(tokens[1]) &&
+                                    !Utility.isEmpty(tokens[2]) &&
+                                    !Utility.isEmpty(tokens[3]) &&
+                                    !Utility.isEmpty(tokens[4]) &&
+                                    !Utility.isEmpty(tokens[5]) &&
+                                    !Utility.isEmpty(tokens[6]) &&
+                                    Utility.isValidateNumber(tokens[4]) &&
+                                    Utility.isInteger(tokens[5]) &&
+                                    Utility.isInteger(tokens[6])
+                    ) {
+                        String customerAcc = tokens[1];
+                        String firstName = tokens[2];
+                        String lastName = tokens[3];
+                        String phoneNum = tokens[4];
+                        int rating = Integer.parseInt(tokens[5]);
+                        int credits = Integer.parseInt(tokens[6]);
+                        customerProvider.addNewCustomer(customerAcc, firstName, lastName, phoneNum, rating, credits);
+                    }
                 } else if (tokens[0].equals("display_customers")) {
                     customerProvider.displayAllCustomers();
-//                    System.out.println("no parameters needed");
-
                 } else if (tokens[0].equals("start_order")) {
-                    String storeName = tokens[1];
-                    String orderID = tokens[2];
-                    String droneID = tokens[3];
-                    String customerAcc = tokens[4];
-                    orderProvider.startOrderForStore(storeProvider, storeName, orderID, droneID, customerAcc, storeDronesProvider, customerProvider);
-//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", drone: " + tokens[3] + ", customer: " + tokens[4]);
-
+                    if (
+                        !Utility.isEmpty(tokens[1]) &&
+                        !Utility.isEmpty(tokens[2]) &&
+                        !Utility.isEmpty(tokens[3]) &&
+                        !Utility.isEmpty(tokens[4])
+                    ) {
+                        String storeName = tokens[1];
+                        String orderID = tokens[2];
+                        String droneID = tokens[3];
+                        String customerAcc = tokens[4];
+                        orderProvider.startOrderForStore(storeProvider, storeName, orderID, droneID, customerAcc, storeDronesProvider, customerProvider);
+                    }
                 } else if (tokens[0].equals("display_orders")) {
-                    String storeName = tokens[1];
-                    orderProvider.displayOrders(storeName, storeProvider);
-//                    System.out.println("store: " + tokens[1]);
+                    if(!Utility.isEmpty(tokens[1])){
+                        String storeName = tokens[1];
+                        orderProvider.displayOrders(storeName, storeProvider);
+                    }
 
                 } else if (tokens[0].equals("request_item")) {
-                    String storeName = tokens[1];
-                    String orderID = tokens[2];
-                    String itemName = tokens[3];
-                    int quantity = Integer.parseInt(tokens[4]);
-                    int unitPrice = Integer.parseInt(tokens[5]);
-                    orderProvider.requestItem(storeProvider, storeName, orderID, itemName, quantity, unitPrice, storeDronesProvider, storeItemsProvider, customerProvider);
-//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2] + ", item: " + tokens[3] + ", quantity: " + tokens[4] + ", unit_price: " + tokens[5]);
+                    if(
+                        !Utility.isEmpty(tokens[1]) &&
+                        !Utility.isEmpty(tokens[2]) &&
+                        !Utility.isEmpty(tokens[3]) &&
+                        !Utility.isEmpty(tokens[4]) &&
+                        !Utility.isEmpty(tokens[5]) &&
+                        Utility.isInteger(tokens[4]) &&
+                        Utility.isInteger(tokens[5])
+                    ){
+                        String storeName = tokens[1];
+                        String orderID = tokens[2];
+                        String itemName = tokens[3];
+                        int quantity = Integer.parseInt(tokens[4]);
+                        int unitPrice = Integer.parseInt(tokens[5]);
+                        orderProvider.requestItem(storeProvider, storeName, orderID, itemName, quantity, unitPrice, storeDronesProvider, storeItemsProvider, customerProvider);
+                    }
 
                 } else if (tokens[0].equals("purchase_order")) {
-                    String storeName = tokens[1];
-                    String orderID = tokens[2];
-                    orderProvider.purchaseOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
-//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
-
+                    if(!Utility.isEmpty(tokens[1]) && !Utility.isEmpty(tokens[2])){
+                        String storeName = tokens[1];
+                        String orderID = tokens[2];
+                        orderProvider.purchaseOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
+                    }
                 } else if (tokens[0].equals("cancel_order")) {
-                    String storeName = tokens[1];
-                    String orderID = tokens[2];
-                    orderProvider.cancelOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
-//                    System.out.println("store: " + tokens[1] + ", order: " + tokens[2]);
-
+                    if(!Utility.isEmpty(tokens[1]) && !Utility.isEmpty(tokens[2])){
+                        String storeName = tokens[1];
+                        String orderID = tokens[2];
+                        orderProvider.cancelOrderSuccess(storeProvider, storeDronesProvider, storeName, orderID, flyDroneProvider, customerProvider);
+                    }
                 } else if (tokens[0].equals("stop")) {
                     System.out.println("stop acknowledged");
                     break;
 
                 }
-//                else if (wholeInputLine.contains("//")) {
-//                    System.out.println(wholeInputLine);
-//                } else {
-//                    System.out.println("command " + tokens[0] + " NOT acknowledged");
-//                }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println();
